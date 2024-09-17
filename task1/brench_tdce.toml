@@ -9,10 +9,12 @@ pipeline = [
   "brili -p",
 ]
 
-[runs.global_dce]
+[runs.best]
 pipeline = [
   "bril2json",
   "python remove_nops.py",
+  "python lvn.py",
   "python global_dce.py",
+  "python local_dce.py",
   "brili -p",
 ]
