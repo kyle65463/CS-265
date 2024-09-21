@@ -1,35 +1,7 @@
 import json
 import sys
 from collections import defaultdict
-
-
-def is_side_effect_free(instr):
-    side_effect_ops = {
-        "jmp",
-        "br",
-        "call",
-        "ret",
-        "print",
-        "nop",
-        "store",
-        "free",
-        "speculate",
-        "commit",
-        "guard",
-    }
-    return "op" in instr and instr["op"] not in side_effect_ops
-
-
-def get_args(instr):
-    if "args" in instr:
-        return set(instr["args"])
-    return set()
-
-
-def get_dest(instr):
-    if "dest" in instr:
-        return instr["dest"]
-    return None
+from utils.instr import is_side_effect_free, get_args_set, get_dest
 
 
 def global_dce(fn):
@@ -41,7 +13,7 @@ def global_dce(fn):
 
     used = defaultdict(set)
     for instr in instrs:
-        for arg in get_args(instr):
+        for arg in get_args_set(instr):
             # Keep track of the instructions that use each argument
             used[arg].add(instr["id"])
 
@@ -51,7 +23,7 @@ def global_dce(fn):
             # Remove the instruction
             removing_instrs[instr["id"]] = True
             # Remove the instruction id from the used set
-            for arg in get_args(instr):
+            for arg in get_args_set(instr):
                 used[arg].remove(instr["id"])
 
     # Filter out the instructions that are being removed

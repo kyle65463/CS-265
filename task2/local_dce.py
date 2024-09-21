@@ -1,63 +1,8 @@
 import json
 import sys
 
-TERMINATORS = {"br", "jmp", "ret"}
-
-
-def form_blocks(fn):
-    blocks = []
-    cur_instrs = []
-    for instr in fn["instrs"]:
-        if "label" in instr:
-            # Start a new block
-            if len(cur_instrs) > 0:
-                blocks.append(
-                    {
-                        "instrs": cur_instrs,
-                    }
-                )
-            cur_instrs = [instr]
-        elif "op" in instr:
-            cur_instrs.append(instr)
-            if instr["op"] in TERMINATORS:
-                blocks.append(
-                    {
-                        "instrs": cur_instrs,
-                    }
-                )
-                cur_instrs = []
-    if len(cur_instrs) > 0:
-        blocks.append({"instrs": cur_instrs})
-    return blocks
-
-
-def is_side_effect_free(instr):
-    side_effect_ops = {
-        "jmp",
-        "br",
-        "call",
-        "ret",
-        "print",
-        "nop",
-        "store",
-        "free",
-        "speculate",
-        "commit",
-        "guard",
-    }
-    return "op" in instr and instr["op"] not in side_effect_ops
-
-
-def get_args(instr):
-    if "args" in instr:
-        return set(instr["args"])
-    return set()
-
-
-def get_dest(instr):
-    if "dest" in instr:
-        return instr["dest"]
-    return None
+from utils.form_blocks import form_blocks
+from utils.instr import is_side_effect_free, get_args_set, get_dest
 
 
 def local_dce(fn):
@@ -65,7 +10,7 @@ def local_dce(fn):
     for block in blocks:
         unused = {}
         for inst in block["instrs"]:
-            for use in get_args(inst):
+            for use in get_args_set(inst):
                 if use in unused:
                     del unused[use]
             dest = get_dest(inst)

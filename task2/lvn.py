@@ -3,50 +3,8 @@ import sys
 import random
 import string
 
-TERMINATORS = {"br", "jmp", "ret"}
-
-
-def form_blocks(fn):
-    blocks = []
-    cur_instrs = []
-    for instr in fn["instrs"]:
-        if "label" in instr:
-            # Start a new block
-            if len(cur_instrs) > 0:
-                blocks.append(
-                    {
-                        "instrs": cur_instrs,
-                    }
-                )
-            cur_instrs = [instr]
-        elif "op" in instr:
-            cur_instrs.append(instr)
-            if instr["op"] in TERMINATORS:
-                blocks.append(
-                    {
-                        "instrs": cur_instrs,
-                    }
-                )
-                cur_instrs = []
-    if len(cur_instrs) > 0:
-        blocks.append({"instrs": cur_instrs})
-    return blocks
-
-
-def is_commutative(instr):
-    return "op" in instr and instr["op"] in {"add", "mul"}
-
-
-def get_args(instr):
-    if "args" in instr:
-        return list(instr["args"])
-    return list()
-
-
-def get_dest(instr):
-    if "dest" in instr:
-        return instr["dest"]
-    return None
+from utils.form_blocks import form_blocks
+from utils.instr import is_commutative, get_args_list, get_dest
 
 
 def check_dest_will_be_used_later(dest, instrs):
@@ -107,7 +65,7 @@ def local_value_numbering(fn):
             if "type" in inst and inst["type"] == "float":
                 continue
 
-            args = [lvn_table.get_num_by_var(arg) for arg in get_args(inst)] + (
+            args = [lvn_table.get_num_by_var(arg) for arg in get_args_list(inst)] + (
                 [inst["value"]] if "value" in inst else []
             )
             if None in args:
@@ -140,7 +98,7 @@ def local_value_numbering(fn):
                     for j in range(i + 1, len(block["instrs"])):
                         block["instrs"][j]["args"] = [
                             new_dest if arg == dest else arg
-                            for arg in get_args(block["instrs"][j])
+                            for arg in get_args_list(block["instrs"][j])
                         ]
                         if (
                             "dest" in block["instrs"][j]
