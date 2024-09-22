@@ -24,5 +24,8 @@ pipeline = [
   "bril2json",
   "python remove_nops.py",
   "python constant.py",
+  "python lvn.py",
+  "python global_dce.py",
+  "python local_dce.py",
   "brili -p {args}",
 ]

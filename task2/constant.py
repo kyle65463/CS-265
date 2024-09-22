@@ -1,3 +1,4 @@
+import copy
 import json
 import sys
 from utils.form_blocks import form_blocks
@@ -70,12 +71,26 @@ def constant_propagation(fn):
                 q.add(succ)
 
 
+def find_block_by_label(blocks, label):
+    for block in blocks:
+        if block["label"] == label:
+            return block
+    return None
+
+
 def apply_constant_propagation(fn):
     blocks = form_blocks(fn)
 
-    for block in blocks:
+    processed_blocks = set()
+    live_blocks = [blocks[0]]
+    while len(live_blocks) > 0:
+        block = live_blocks.pop()
+        if block["id"] in processed_blocks:
+            continue
+        processed_blocks.add(block["id"])
+        has_const_branch = False
         for instr in block["instrs"]:
-            if "args" in instr and instr["op"] not in ["br", "jmp", "ret"]:
+            if "args" in instr:
                 all_args_constant = all(
                     arg in instr["state"] and instr["state"][arg] != "?"
                     for arg in instr["args"]
@@ -92,7 +107,7 @@ def apply_constant_propagation(fn):
                         elif instr["op"] == "mul":
                             result = a * b
                         elif instr["op"] == "div":
-                            result = a // b 
+                            result = a // b
                         instr["op"] = "const"
                         instr["value"] = result
                         del instr["args"]
@@ -118,7 +133,21 @@ def apply_constant_propagation(fn):
                         instr["op"] = "const"
                         instr["value"] = const_args[0]
                         del instr["args"]
+                    elif instr["op"] == "br":
+                        has_const_branch = True
+                        cond = const_args[0]
+                        label = instr["labels"][0] if cond else instr["labels"][1]
+                        next_block = find_block_by_label(blocks, label)
+                        live_blocks.append(next_block)
+                        instr["op"] = "jmp"
+                        instr["labels"] = [label]
+                        del instr["args"]
 
+        if not has_const_branch:
+            for succ in block["successors"]:
+                live_blocks.append(blocks[succ])
+
+    blocks = [block for block in blocks if block["id"] in processed_blocks]
     for block in blocks:
         for instr in block["instrs"]:
             if "state" in instr:
@@ -132,4 +161,10 @@ if __name__ == "__main__":
     for fn in prog["functions"]:
         constant_propagation(fn)
         apply_constant_propagation(fn)
+        while True:
+            old_fn = copy.deepcopy(fn)
+            constant_propagation(fn)
+            apply_constant_propagation(fn)
+            if fn == old_fn:
+                break
     json.dump(prog, sys.stdout, indent=2)
