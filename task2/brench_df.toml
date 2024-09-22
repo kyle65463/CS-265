@@ -1,5 +1,5 @@
 # which benchmarks to run
-benchmarks = '../examples/test/lvn/*.bril'
+benchmarks = '../examples/test/df/*.bril'
 # how to extract the performance metric from stderr
 extract = 'total_dyn_inst: (\d+)'
 
@@ -16,7 +16,7 @@ pipeline = [
   "python lvn.py",
   "python global_dce.py",
   "python local_dce.py",
-  "brili -p",
+  "brili -p {args}",
 ]
 
 [runs.task2]
@@ -24,8 +24,5 @@ pipeline = [
   "bril2json",
   "python remove_nops.py",
   "python constant.py",
-  "python lvn.py",
-  "python global_dce.py",
-  "python local_dce.py",
-  "brili -p",
+  "brili -p {args}",
 ]
