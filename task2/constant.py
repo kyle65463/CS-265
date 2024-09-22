@@ -1,6 +1,7 @@
 import copy
 import json
 import sys
+from utils.dataflow import forward_df
 from utils.form_blocks import form_blocks
 
 
@@ -51,26 +52,6 @@ def f(block, i):
     return out
 
 
-def constant_propagation(fn):
-    blocks = form_blocks(fn)
-
-    q, ins, outs = set(), [], []
-    for i in range(len(blocks)):
-        q.add(i)
-        ins.append({})
-        outs.append({})
-
-    while len(q) > 0:
-        id = q.pop()
-        block = blocks[id]
-        ins[id] = meet([outs[p] for p in block["predecessors"]])
-        original_outs = outs[id].copy()
-        outs[id] = f(block, ins[id])
-        if outs[id] != original_outs:
-            for succ in block["successors"]:
-                q.add(succ)
-
-
 def find_block_by_label(blocks, label):
     for block in blocks:
         if block["label"] == label:
@@ -78,7 +59,7 @@ def find_block_by_label(blocks, label):
     return None
 
 
-def apply_constant_propagation(fn):
+def constant_propagation(fn):
     blocks = form_blocks(fn)
 
     processed_blocks = set()
@@ -159,12 +140,12 @@ def apply_constant_propagation(fn):
 if __name__ == "__main__":
     prog = json.load(sys.stdin)
     for fn in prog["functions"]:
+        forward_df(fn, f, meet)
         constant_propagation(fn)
-        apply_constant_propagation(fn)
         while True:
             old_fn = copy.deepcopy(fn)
+            forward_df(fn, f, meet)
             constant_propagation(fn)
-            apply_constant_propagation(fn)
             if fn == old_fn:
                 break
     json.dump(prog, sys.stdout, indent=2)
