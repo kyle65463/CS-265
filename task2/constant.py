@@ -5,17 +5,6 @@ from utils.dataflow import forward_df
 from utils.form_blocks import form_blocks
 
 
-def infer_type(value):
-    if isinstance(value, bool):
-        return "bool"
-    elif isinstance(value, int):
-        return "int"
-    elif isinstance(value, float):
-        return "float"
-    else:
-        return "int"
-
-
 def meet(pred_outs):
     if len(pred_outs) == 0:
         return {}
