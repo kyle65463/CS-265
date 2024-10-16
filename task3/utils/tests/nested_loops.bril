@@ -1,0 +1,29 @@
+@main {
+.entry:
+  i: int = const 0;
+  max: int = const 10;
+  j: int = const 0;
+
+.header1:
+  cond1: bool = lt i max;
+  br cond1 .header2 .exit;
+
+.header2:
+  cond2: bool = lt j max;
+  br cond2 .C .D;
+
+.C:
+  one: int = const 1;
+  j: int = add j one;
+  jmp .header2;
+
+.D:
+  one: int = const 1;
+  i: int = add i one;
+  j: int = const 0;
+  jmp .header1;
+
+.exit:
+  print i;
+  print j;
+}

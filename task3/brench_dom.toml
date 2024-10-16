@@ -1,0 +1,17 @@
+# which benchmarks to run
+benchmarks = './utils/tests/*.bril'
+# how to extract the performance metric from stderr
+extract = 'total_dyn_inst: (\d+)'
+
+[runs.baseline]
+pipeline = [
+  "bril2json",
+  "brili -p",
+]
+
+[runs.task3]
+pipeline = [
+  "bril2json",
+  "python utils/loop.py",
+  "brili -p",
+]
