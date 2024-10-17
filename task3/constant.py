@@ -1,8 +1,8 @@
 import copy
 import json
 import sys
-from utils.dataflow import forward_df
-from utils.form_blocks import form_blocks
+from utils.legacy.dataflow import forward_df
+from utils.legacy.form_blocks import form_blocks
 
 
 def meet(pred_outs):

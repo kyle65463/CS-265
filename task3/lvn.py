@@ -3,8 +3,8 @@ import sys
 import random
 import string
 
-from utils.form_blocks import form_blocks
-from utils.instr import is_commutative, get_args_list, get_dest
+from utils.legacy.form_blocks import form_blocks
+from utils.legacy.instr import is_commutative, get_args_list, get_dest
 
 
 def check_dest_will_be_used_later(dest, instrs):

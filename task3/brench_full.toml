@@ -9,20 +9,21 @@ pipeline = [
   "brili -p {args}",
 ]
 
-[runs.task1]
-pipeline = [
-  "bril2json",
-  "python remove_nops.py",
-  "python lvn.py",
-  "python global_dce.py",
-  "python local_dce.py",
-  "brili -p {args}",
-]
-
 [runs.task2]
 pipeline = [
   "bril2json",
-  "python remove_nops.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "brili -p {args}",
+]
+
+[runs.task3]
+pipeline = [
+  "bril2json",
+  "python normalize_loops.py",
+  "python ../examples/to_ssa.py",
+  "python licm.py",
   "python constant.py",
   "python lvn.py",
   "python liveness_dce.py",

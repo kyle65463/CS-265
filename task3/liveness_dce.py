@@ -1,8 +1,8 @@
 import json
 import sys
-from utils.dataflow import backward_df
-from utils.form_blocks import form_blocks
-from utils.instr import get_args_set, get_dest
+from utils.legacy.dataflow import backward_df
+from utils.legacy.form_blocks import form_blocks
+from utils.legacy.instr import get_args_set, get_dest
 
 
 def meet(succ_ins):
