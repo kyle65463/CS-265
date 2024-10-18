@@ -1,0 +1,37 @@
+# ARGS: 1000
+@main(x: int) {
+.entry:
+  i: int = const 0;
+  j: int = const 0;
+  iter: int = const 1000;
+  a: int = const 87;
+  b: int = const 100;
+  res: int = const 0;
+
+.header1:
+  cond1: bool = lt i iter;
+  br cond1 .header2 .exit;
+
+.header2:
+  cond2: bool = lt j iter;
+  br cond2 .C .D;
+
+.C:
+  one: int = const 1;
+  inv: int = mul x b;
+  inv2: int = add inv a;
+  res: int = add res inv2;
+  j: int = add j one;
+  jmp .header2;
+
+.D:
+  one: int = const 1;
+  i: int = add i one;
+  j: int = const 0;
+  jmp .header1;
+
+.exit:
+  print i;
+  print j;
+  print res;
+}

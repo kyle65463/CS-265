@@ -1,0 +1,27 @@
+@main {
+.entry:
+  i: int = const 0;
+  max: int = const 10;
+
+.header:
+  cond: bool = lt i max;
+  br cond .branch .exit;
+
+.branch:
+  zero: int = const 0;
+  cond_b: bool = eq i zero;
+  br cond_b .B .C;
+
+.B:
+  one: int = const 1;
+  i: int = add i one;
+  jmp .header;
+
+.C:
+  two: int = const 2;
+  i: int = add i two;
+  jmp .header;
+
+.exit:
+  print i;
+}
