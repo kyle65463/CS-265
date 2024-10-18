@@ -29,6 +29,7 @@ def form_blocks(func):
             name = block[0]["label"]
         else:
             name = f"b{i}"
+            block.insert(0, {"label": name})
         name2block[name] = block
 
     cfg = {}

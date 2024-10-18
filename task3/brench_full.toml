@@ -22,7 +22,7 @@ pipeline = [
 pipeline = [
   "bril2json",
   "python normalize_loops.py",
-  "python ../examples/to_ssa.py",
+  "python to_ssa.py",
   "python licm.py",
   "python constant.py",
   "python lvn.py",

@@ -109,7 +109,7 @@ def insert_preheaders(fn, loops):
     cfg, blocks = deepcopy(cfg), deepcopy(blocks)
 
     for loop in loops:
-        header, latch = loop["header"], loop["latch"]
+        header = loop["header"]
         header_block = cfg[header]
 
         # insert preheader block
@@ -126,7 +126,9 @@ def insert_preheaders(fn, loops):
                     "labels": [header],
                 },
             ],
-            "preds": header_block["preds"],
+            "preds": [
+                pred for pred in header_block["preds"] if pred not in loop["blocks"]
+            ],
             "succs": [header],
         }
         cfg[preheader] = preheader_block
@@ -145,7 +147,23 @@ def insert_preheaders(fn, loops):
 
         # modify original header pred blocks
         for pred_name in header_preds:
+            if pred_name in loop["blocks"]:
+                continue
             pred_block = cfg[pred_name]
+            pred_block["instrs"] = [
+                (
+                    instr
+                    if not (is_jmp(instr) or is_br(instr))
+                    else {
+                        **instr,
+                        "labels": [
+                            preheader if label == header else label
+                            for label in instr.get("labels", [])
+                        ],
+                    }
+                )
+                for instr in pred_block["instrs"]
+            ]
             pred_block["succs"] = [
                 preheader if succ == header else succ for succ in pred_block["succs"]
             ]

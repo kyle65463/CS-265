@@ -10,37 +10,59 @@ def is_br(instr):
     return "op" in instr and instr["op"] == "br"
 
 
-def get_dominators(cfg, blocks):
+def postorder_rec(cfg, block, visited, result):
+    if block["name"] in visited:
+        return
+    visited.add(block["name"])
+
+    for succ in block["succs"]:
+        postorder_rec(cfg, cfg[succ], visited, result)
+    result.append(block)
+
+
+def postorder(cfg, block):
+    out = []
+    postorder_rec(cfg, block, set(), out)
+    return out
+
+
+def get_dominators(cfg, blocks, strict=False):
     if len(blocks) == 0:
         return {}
-    q = [blocks[0]["name"]]
     dom = {}
-    while len(q) > 0:
-        block_name = q.pop()
-        block = cfg[block_name]
-        original_dom = deepcopy(dom[block_name]) if block_name in dom else None
-        dom[block_name] = set()
-        dom[block_name].add(block_name)
+    iter_blocks = reversed(postorder(cfg, blocks[0]))
+    while True:
+        has_changed = False
+        for block in iter_blocks:
+            block_name = block["name"]
+            block = cfg[block_name]
+            original_dom = deepcopy(dom[block_name]) if block_name in dom else None
+            dom[block_name] = set()
+            dom[block_name].add(block_name)
 
-        pred_dominators = None
-        for pred_name in block["preds"]:
-            if pred_dominators is None:
-                if pred_name in dom:
-                    pred_dominators = dom[pred_name]
-                else:
-                    pred_dominators = set()
-            elif pred_name in dom:
-                pred_dominators = pred_dominators.intersection(dom[pred_name])
+            pred_dominators = None
+            for pred_name in block["preds"]:
+                if pred_name == block_name:
+                    continue
+                if pred_dominators is None:
+                    if pred_name in dom:
+                        pred_dominators = dom[pred_name]
+                    else:
+                        pred_dominators = set()
+                elif pred_name in dom:
+                    pred_dominators = pred_dominators.intersection(dom[pred_name])
 
-        if pred_dominators is not None:
-            dom[block_name] = dom[block_name].union(pred_dominators)
-
-        if original_dom != dom[block_name]:
-            for succ_name in block["succs"]:
-                q.append(succ_name)
+            if pred_dominators is not None:
+                dom[block_name] = dom[block_name].union(pred_dominators)
+            if original_dom != dom[block_name]:
+                has_changed = True
+        if not has_changed:
+            break
     for block in blocks:
         if block["name"] not in dom:
             dom[block["name"]] = set()
+        if strict and block["name"] in dom[block["name"]]:
+            dom[block["name"]].remove(block["name"])
     for block_name, dom_set in dom.items():
         dom[block_name] = list(dom_set)
     return dom
