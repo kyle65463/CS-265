@@ -1,0 +1,46 @@
+# ARGS: 1000
+@main(x: int) {
+.entry:
+  i.0: int = const 0;
+  j.0: int = id i.0;
+  iter.0: int = const 1000;
+  a.0: int = const 87;
+  b.0: int = const 100;
+  res.0: int = id i.0;
+.header1_preheader:
+  one.3: int = const 1;
+  inv.2: int = mul x b.0;
+  inv2.2: int = add inv.2 a.0;
+  one.2: int = id one.3;
+  j.3: int = const 0;
+  res.1: int = id res.0;
+  j.1: int = id j.0;
+  i.1: int = id i.0;
+  jmp .header1;
+.header1:
+  cond1.1: bool = lt i.1 iter.0;
+  br cond1.1 .header2_preheader .exit;
+.header2_preheader:
+  res.2: int = id res.1;
+  j.2: int = id j.1;
+  jmp .header2;
+.header2:
+  cond2.2: bool = lt j.2 iter.0;
+  br cond2.2 .C .D;
+.C:
+  res.3: int = add res.2 inv2.2;
+  j.4: int = add j.2 one.3;
+  res.2: int = id res.3;
+  j.2: int = id j.4;
+  jmp .header2;
+.D:
+  i.2: int = add i.1 one.2;
+  res.1: int = id res.2;
+  j.1: int = id j.3;
+  i.1: int = id i.2;
+  jmp .header1;
+.exit:
+  print i.1;
+  print j.1;
+  print res.1;
+}
