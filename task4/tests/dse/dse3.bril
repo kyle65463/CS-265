@@ -1,0 +1,12 @@
+# Tes Case 3: Consecutive Stores with Load (First Store Dead)
+@main {
+  n: int = const 10;
+  ptr: ptr<int> = alloc n;
+  val1: int = const 42;
+  val2: int = const 100;
+  store ptr val1;
+  store ptr val2;
+  loaded_val: int = load ptr;
+  print loaded_val;
+  free ptr;
+}

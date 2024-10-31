@@ -1,0 +1,25 @@
+# Test Case 4: Store Followed by Load in Different Blocks (Control Flow)
+@main {
+  n: int = const 10;
+  ptr: ptr<int> = alloc n;
+
+  val: int = const 25;
+  store ptr val;
+
+  cond: bool = lt n n;
+  br cond .then .else;
+
+.then:
+  val_unreachable: int = const 0;
+  store ptr val_unreachable;
+  jmp .end;
+
+.else:
+  loaded_val: int = load ptr;
+  print loaded_val;
+  jmp .end;
+
+.end:
+  free ptr;
+  ret;
+}

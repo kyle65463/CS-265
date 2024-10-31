@@ -1,0 +1,14 @@
+# Test Case 6: Dead Store with Pointer Arithmetic (`ptradd`)
+@main {
+  n: int = const 10;
+  base_ptr: ptr<int> = alloc n;
+  zero: int = const 0;
+  ptr_with_offset: ptr<int> = ptradd base_ptr zero;
+  val1: int = const 10;
+  val2: int = const 20;
+  store base_ptr val1;
+  store ptr_with_offset val2;
+  loaded_val: int = load base_ptr;
+  print loaded_val;
+  free base_ptr;
+}

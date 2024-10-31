@@ -1,6 +1,5 @@
 # which benchmarks to run
-#benchmarks = '../benchmarks/**/*.bril'
-benchmarks = 'utils/tests/nested_loops.bril'
+benchmarks = '../benchmarks/**/*.bril'
 # how to extract the performance metric from stderr
 extract = 'total_dyn_inst: (\d+)'
 
@@ -29,5 +28,12 @@ pipeline = [
   "python lvn.py",
   "python liveness_dce.py",
   "python from_ssa.py",
+  "brili -p {args}",
+]
+
+[runs.task4]
+pipeline = [
+  "bril2json",
+  "python dse.py",
   "brili -p {args}",
 ]

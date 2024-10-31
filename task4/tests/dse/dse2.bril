@@ -1,0 +1,10 @@
+# Test Case 2: Store Followed by Load (Store is Live)
+@main {
+  n: int = const 10;
+  ptr: ptr<int> = alloc n;
+  val: int = const 50;
+  store ptr val;
+  loaded_val: int = load ptr;
+  print loaded_val;
+  free ptr;
+}
