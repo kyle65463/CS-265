@@ -12,6 +12,6 @@ pipeline = [
 [runs.mem]
 pipeline = [
   "bril2json",
-  "python store_forwarding.py",
+  "python rle.py",
   "brili -p {args}",
 ]

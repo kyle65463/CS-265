@@ -35,12 +35,13 @@ def collect_memory_locations(fn):
                 elif op == "ptradd":
                     unknown_loc = f"unknown_{block['id']}_{i}"
                     memory_locations.add(unknown_loc)
-                # handle load?
+                elif op == "call" and "ptr" in instr["type"]:
+                    new_location = f"unknown_{block['id']}_{i}"
+                    memory_locations.add(new_location)
     return memory_locations
 
 
 def alias_meet(pred_outs):
-    """Union of points-to sets for each variable"""
     if len(pred_outs) == 0:
         return ext_memory_locations.copy()
 
@@ -55,10 +56,7 @@ def alias_meet(pred_outs):
 
 
 def alias_f(block, in_state):
-    """Transfer function for pointer analysis"""
     out = in_state.copy()
-
-    # Track allocation sites by instruction index
     for i, instr in enumerate(block["instrs"]):
         instr["alias"] = out.copy()
         if "dest" in instr:
@@ -72,7 +70,6 @@ def alias_f(block, in_state):
                 out[dest] = out.get(src, all_memory_locations).copy()
             elif op == "ptradd":
                 base_ptr = instr["args"][0]
-                offset = instr["args"][1]
                 base_pts = out.get(base_ptr, all_memory_locations).copy()
                 # Since we don't know the offset, conservatively assume dest may point
                 # to base_ptr's locations and also to new locations.
@@ -81,7 +78,7 @@ def alias_f(block, in_state):
             elif op == "call" and "ptr" in instr["type"]:
                 new_location = f"unknown_{block['id']}_{i}"
                 out[dest] = all_memory_locations.union({new_location})
-            elif op in ["load", "store"]:
+            elif op == "load" and "ptr" in instr["type"]:
                 out[dest] = all_memory_locations.copy()
     return out
 

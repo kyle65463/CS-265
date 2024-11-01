@@ -1,0 +1,18 @@
+@modify(x: ptr<int>) {
+  val: int = const 99;
+  store x val;
+  ret;
+}
+
+@main {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  
+  store x n;
+  a: int = load x;
+  call @modify x;
+  b: int = load x;
+  print b;
+  
+  free x;
+}

@@ -14,5 +14,6 @@ pipeline = [
   "bril2json",
   "python dse.py",
   "python store_forwarding.py",
+  "python rle.py",
   "brili -p {args}",
 ]

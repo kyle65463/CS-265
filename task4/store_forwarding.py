@@ -18,20 +18,14 @@ def store_forwarding_f(block, in_state):
             p = instr["args"][0]
             v = instr["args"][1]
             pts_p = instr["alias"].get(p, all_memory_locations)
-            # Update mapping for each memory location in pts_p
             for l in pts_p:
                 out_state[l] = v
         elif op == "load":
-            # Mapping remains unchanged
             pass
         elif op == "call":
             # Invalidate all mappings
             for l in all_memory_locations:
                 out_state[l] = None
-        else:
-            # For other instructions, check if they may modify memory
-            # For simplicity, assume other instructions do not affect the mapping
-            pass
     return out_state
 
 
@@ -46,7 +40,7 @@ def store_forwarding_meet(preds):
             if v1 == v2:
                 continue
             else:
-                result[l] = None  # Mappings disagree; set to unknown
+                result[l] = None
     return result
 
 
@@ -67,18 +61,15 @@ def store_forwarding(fn):
                 l = next(iter(pts_p))
                 v = store_map.get(l, None)
                 if v is not None:
-                    # Replace the load with an assignment
                     new_instr = {
                         "dest": dest,
                         "type": instr["type"],
-                        # Determine if v is a constant or variable
                         "op": "const" if isinstance(v, (int, float)) else "id",
                         "value": v if isinstance(v, (int, float)) else None,
                         "args": [] if isinstance(v, (int, float)) else [v],
                     }
                     new_instrs.append(new_instr)
-                    continue  # Skip adding the original load
-        # Otherwise, keep the original instruction
+                    continue
         new_instrs.append(instr)
     fn["instrs"] = new_instrs
 
