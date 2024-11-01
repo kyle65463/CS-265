@@ -1,0 +1,17 @@
+@get_ptr(): ptr<int> {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  ret x;
+}
+
+@main {
+  x: ptr<int> = call @get_ptr;
+  
+  val: int = const 42;
+  store x val;
+  
+  y: int = load x;
+  print y;
+  
+  free x;
+}

@@ -1,0 +1,18 @@
+@main {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  
+  val1: int = const 20;
+  store x val1;
+  
+  # Create an alias to x
+  x_alias: ptr<int> = id x;
+  
+  val2: int = const 30;
+  store x_alias val2;
+  
+  y: int = load x;
+  print y;
+  
+  free x;
+}

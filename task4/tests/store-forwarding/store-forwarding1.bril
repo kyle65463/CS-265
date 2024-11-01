@@ -1,0 +1,12 @@
+@main {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  
+  val: int = const 42;
+  store x val;
+  
+  y: int = load x;
+  print y;
+  
+  free x;
+}

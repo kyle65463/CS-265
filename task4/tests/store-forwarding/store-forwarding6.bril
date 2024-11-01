@@ -1,0 +1,21 @@
+@modify_ptr(x: ptr<int>) {
+  val: int = const 50;
+  store x val;
+  ret;
+}
+
+@main {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  
+  val1: int = const 25;
+  store x val1;
+  
+  # Function call that may modify x
+  call @modify_ptr x;
+  
+  y: int = load x;
+  print y;
+  
+  free x;
+}

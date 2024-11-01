@@ -1,0 +1,13 @@
+# Test Case 5: Dead Store with Pointer Copy (`id`)
+@main {
+  n: int = const 10;
+  ptr1: ptr<int> = alloc n;
+  ptr_alias: ptr<int> = id ptr1;
+  val1: int = const 20;
+  val2: int = const 40;
+  store ptr1 val1;
+  store ptr_alias val2;
+  loaded_val: int = load ptr1;
+  print loaded_val;
+  free ptr1;
+}

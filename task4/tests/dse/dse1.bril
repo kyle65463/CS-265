@@ -1,0 +1,11 @@
+# Test Case 1: Stores with No Loads (All Stores Dead)
+@main {
+  n: int = const 10;
+  ptr: ptr<int> = alloc n;
+  val1: int = const 42;
+  val2: int = const 100;
+  store ptr val1;
+  store ptr val2;
+  print n;
+  free ptr;
+}

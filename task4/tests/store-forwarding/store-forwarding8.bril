@@ -1,0 +1,15 @@
+@main {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  
+  val1: int = const 5;
+  store x val1;
+  
+  val2: int = const 10;
+  store x val2;
+  
+  y: int = load x;
+  print y;
+  
+  free x;
+}

@@ -1,0 +1,29 @@
+# Test Case 8: Dead Store in Loop (Store Overwritten in Same Iteration)
+@main {
+  n: int = const 3;
+  ptr: ptr<int> = alloc n;
+
+  zero: int = const 0;
+  one: int = const 1;
+  i: int = id zero;
+
+.loop:
+  cond: bool = lt i n;
+  br cond .body .end;
+
+.body:
+  val: int = const 100;
+  store ptr val;
+
+  new_val: int = mul val i;
+  store ptr new_val;
+
+  loaded_val: int = load ptr;
+  print loaded_val;
+
+  i: int = add i one;
+  jmp .loop;
+
+.end:
+  free ptr;
+}

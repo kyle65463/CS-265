@@ -1,0 +1,13 @@
+# Test Case 7: Store After Load (Store is Dead)
+@main {
+  n: int = const 10;
+  ptr: ptr<int> = alloc n;
+  val: int = const 5;
+  store ptr val;
+  loaded_val: int = load ptr;
+  print loaded_val;
+
+  new_val: int = const 10;
+  store ptr new_val;
+  free ptr;
+}

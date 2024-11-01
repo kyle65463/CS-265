@@ -1,0 +1,24 @@
+@main {
+  n: int = const 1;
+  x: ptr<int> = alloc n;
+  
+  val1: int = const 10;
+  val2: int = const 20;
+  
+  cond: bool = const true;
+  br cond .then .else;
+  
+.then:
+  store x val1;
+  jmp .join;
+  
+.else:
+  store x val2;
+  jmp .join;
+  
+.join:
+  y: int = load x;
+  print y;
+  
+  free x;
+}
