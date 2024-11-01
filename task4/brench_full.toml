@@ -18,19 +18,6 @@ pipeline = [
   "brili -p {args}",
 ]
 
-[runs.task3]
-pipeline = [
-  "bril2json",
-  "python normalize_loops.py",
-  "python to_ssa.py",
-  "python licm.py",
-  "python constant.py",
-  "python lvn.py",
-  "python liveness_dce.py",
-  "python from_ssa.py",
-  "brili -p {args}",
-]
-
 [runs.task4]
 pipeline = [
   "bril2json",
