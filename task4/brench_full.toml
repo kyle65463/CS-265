@@ -35,5 +35,6 @@ pipeline = [
 pipeline = [
   "bril2json",
   "python dse.py",
+  "python store_forwarding.py",
   "brili -p {args}",
 ]

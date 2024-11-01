@@ -1,0 +1,18 @@
+@main {
+  n: int = const 10;
+  x: ptr<int> = alloc n;
+  
+  idx: int = const 0;
+  x_offset: ptr<int> = ptradd x idx;
+  
+  val1: int = const 100;
+  store x val1;
+  
+  val2: int = const 200;
+  store x_offset val2;
+  
+  y: int = load x;
+  print y;
+  
+  free x;
+}
