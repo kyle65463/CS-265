@@ -18,8 +18,12 @@ def store_forwarding_f(block, in_state):
             p = instr["args"][0]
             v = instr["args"][1]
             pts_p = instr["alias"].get(p, all_memory_locations)
-            for l in pts_p:
+            if len(pts_p) == 1:
+                l = next(iter(pts_p))
                 out_state[l] = v
+            else:
+                for l in pts_p:
+                    out_state[l] = None
         elif op == "load":
             pass
         elif op == "call":
@@ -60,6 +64,7 @@ def store_forwarding(fn):
             if len(pts_p) == 1:
                 l = next(iter(pts_p))
                 v = store_map.get(l, None)
+                # what if v gets changed after the store?
                 if v is not None:
                     new_instr = {
                         "dest": dest,

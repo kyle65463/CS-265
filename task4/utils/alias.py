@@ -35,7 +35,7 @@ def collect_memory_locations(fn):
                 elif op == "ptradd":
                     unknown_loc = f"unknown_{block['id']}_{i}"
                     memory_locations.add(unknown_loc)
-                elif op == "call" and "ptr" in instr["type"]:
+                elif op == "call" and "type" in instr and "ptr" in instr["type"]:
                     new_location = f"unknown_{block['id']}_{i}"
                     memory_locations.add(new_location)
     return memory_locations
