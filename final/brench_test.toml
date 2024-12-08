@@ -22,6 +22,7 @@ pipeline = [
 pipeline = [
   "bril2json",
   "python inline.py all",
+  "python idce.py",
   "python constant.py",
   "python lvn.py",
   "python liveness_dce.py",
