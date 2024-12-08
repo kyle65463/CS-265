@@ -64,6 +64,8 @@ def local_value_numbering(fn):
                 continue
             if "type" in inst and inst["type"] == "float":
                 continue
+            if inst["op"] in ["alloc"]:
+                continue
 
             args = [lvn_table.get_num_by_var(arg) for arg in get_args_list(inst)] + (
                 [inst["value"]] if "value" in inst else []
