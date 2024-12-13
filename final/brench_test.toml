@@ -18,10 +18,32 @@ pipeline = [
   "brili -p {args}",
 ]
 
-[runs.inline]
+[runs.inline_optimal_ic]
 pipeline = [
   "bril2json",
   "python inline.py optimal_ic",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "brili -p {args}",
+]
+
+[runs.inline_fn_size_10]
+pipeline = [
+  "bril2json",
+  "python inline.py fn_size 10",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "brili -p {args}",
+]
+
+[runs.inline_fn_size_20]
+pipeline = [
+  "bril2json",
+  "python inline.py fn_size 20",
   "python idce.py",
   "python constant.py",
   "python lvn.py",

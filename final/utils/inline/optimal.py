@@ -473,21 +473,23 @@ def collect_all_configurations_iterative(
 csv_path = Path(__file__).parent / "optimal_configs.csv"
 
 
-def get_optimal_program_size_inline_config(prog: Dict) -> Dict[Tuple[str, str], bool]:
+def get_optimal_program_size_inline_config(
+    _: Dict, name: str
+) -> Dict[Tuple[str, str], bool]:
     with open(csv_path) as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row["program_name"] == prog["name"]:
+            if row["program_name"] == name:
                 return ast.literal_eval(row["best_program_size_config"])
     return {}
 
 
 def get_optimal_instruction_count_inline_config(
-    prog: Dict,
+    _: Dict, name: str
 ) -> Dict[Tuple[str, str], bool]:
     with open(csv_path) as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row["program_name"] == prog["name"]:
+            if row["program_name"] == name:
                 return ast.literal_eval(row["best_executed_instr_count_config"])
     return {}

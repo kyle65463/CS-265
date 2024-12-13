@@ -3,6 +3,7 @@ import sys
 import uuid
 
 from utils.inline.all import get_all_inline_config
+from utils.inline.fn_size import get_fn_size_inline_config
 from utils.inline.optimal import (
     get_optimal_instruction_count_inline_config,
     get_optimal_program_size_inline_config,
@@ -10,6 +11,7 @@ from utils.inline.optimal import (
 
 get_inline_config = {
     "all": get_all_inline_config,
+    "fn_size": get_fn_size_inline_config,
     "optimal_ps": get_optimal_program_size_inline_config,
     "optimal_ic": get_optimal_instruction_count_inline_config,
 }
@@ -178,8 +180,6 @@ if __name__ == "__main__":
 
     strategy = sys.argv[1]
     prog = json.load(sys.stdin)
-    if len(sys.argv) > 2:
-        prog["name"] = sys.argv[2]
-    config = get_inline_config[strategy](prog)
+    config = get_inline_config[strategy](prog, *sys.argv[2:])
     prog = inline(prog, config)
     print(json.dumps(prog, indent=2))

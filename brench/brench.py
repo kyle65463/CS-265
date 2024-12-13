@@ -25,7 +25,7 @@ def run_pipe(cmds, input, timeout, name):
     """
     procs = []
     for cmd in cmds:
-        if "inline" in cmd:
+        if "inline.py optimal" in cmd:
             cmd += " " + name
         last = len(procs) == len(cmds) - 1
         proc = subprocess.Popen(
