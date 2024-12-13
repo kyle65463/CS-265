@@ -21,7 +21,7 @@ pipeline = [
 [runs.inline]
 pipeline = [
   "bril2json",
-  "python inline.py all",
+  "python inline.py optimal_ic",
   "python idce.py",
   "python constant.py",
   "python lvn.py",

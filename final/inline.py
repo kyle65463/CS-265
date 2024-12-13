@@ -3,24 +3,27 @@ import sys
 import uuid
 
 from utils.inline.all import get_all_inline_config
-from utils.inline.optimal import get_optimal_inline_config
+from utils.inline.optimal import (
+    get_optimal_instruction_count_inline_config,
+    get_optimal_program_size_inline_config,
+)
 
 get_inline_config = {
     "all": get_all_inline_config,
-    "optimal": get_optimal_inline_config,
+    "optimal_ps": get_optimal_program_size_inline_config,
+    "optimal_ic": get_optimal_instruction_count_inline_config,
 }
 
 
-def inline(prog: dict, config: list[dict]):
+def inline(prog: dict, config: dict[tuple[str, str], bool]):
     """
     Inline the program using the given configuration.
 
     Args:
         prog: The program to inline.
-        config: The configuration to use for inlining. Each config entry is a dict with:
-            - src: The source function name
-            - dest: The destination function name (function being called)
-            - inlined: Boolean indicating whether to inline this call
+        config: The configuration to use for inlining. A dictionary where:
+            - key: Tuple of (source_function, destination_function) names
+            - value: Boolean indicating whether to inline this call
 
     Returns:
         The inlined program.
@@ -41,15 +44,7 @@ def inline(prog: dict, config: list[dict]):
             callee_name = instr["funcs"][0]
 
             # Check if this call should be inlined based on config
-            should_inline = False
-            for cfg in config:
-                if (
-                    cfg["src"] == fn["name"]
-                    and cfg["dest"] == callee_name
-                    and cfg["inlined"]
-                ):
-                    should_inline = True
-                    break
+            should_inline = config.get((fn["name"], callee_name), False)
 
             if not should_inline:
                 new_instrs.append(instr)
@@ -176,13 +171,15 @@ def inline(prog: dict, config: list[dict]):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or sys.argv[1] not in get_inline_config:
+    if len(sys.argv) < 2 or sys.argv[1] not in get_inline_config:
         print(f"Usage: {sys.argv[0]} <strategy>")
         print(f"Available strategies: {', '.join(get_inline_config.keys())}")
         sys.exit(1)
 
     strategy = sys.argv[1]
     prog = json.load(sys.stdin)
+    if len(sys.argv) > 2:
+        prog["name"] = sys.argv[2]
     config = get_inline_config[strategy](prog)
     prog = inline(prog, config)
     print(json.dumps(prog, indent=2))

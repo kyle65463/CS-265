@@ -16,7 +16,7 @@ __version__ = "1.0.0"
 ARGS_RE = r"ARGS: (.*)"
 
 
-def run_pipe(cmds, input, timeout):
+def run_pipe(cmds, input, timeout, name):
     """Execute a pipeline of shell commands.
 
     Send the given input (text) string into the first command, then pipe
@@ -25,6 +25,8 @@ def run_pipe(cmds, input, timeout):
     """
     procs = []
     for cmd in cmds:
+        if "inline" in cmd:
+            cmd += " " + name
         last = len(procs) == len(cmds) - 1
         proc = subprocess.Popen(
             cmd,
@@ -58,7 +60,8 @@ def run_bench(pipeline, fn, timeout):
 
     # Run pipeline.
     cmds = [c.format(args=args) for c in pipeline]
-    return run_pipe(cmds, in_data, timeout)
+    name = os.path.basename(fn)
+    return run_pipe(cmds, in_data, timeout, name)
 
 
 def get_result(strings, extract_re):

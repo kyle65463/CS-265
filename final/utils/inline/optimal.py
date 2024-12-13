@@ -2,6 +2,9 @@ import copy
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import List, Dict, Tuple, Optional
+import ast
+from pathlib import Path
+import csv
 
 from utils.inline.graph import form_call_graph
 
@@ -467,8 +470,24 @@ def collect_all_configurations_iterative(
     ]
 
 
-def get_optimal_inline_config(prog: Dict) -> List[Dict]:
-    nodes, edges = form_call_graph(prog)
-    tree = build_inlining_tree(nodes, edges)
-    configs = collect_all_configurations_iterative(tree)
-    return configs[0]
+csv_path = Path(__file__).parent / "optimal_configs.csv"
+
+
+def get_optimal_program_size_inline_config(prog: Dict) -> Dict[Tuple[str, str], bool]:
+    with open(csv_path) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["program_name"] == prog["name"]:
+                return ast.literal_eval(row["best_program_size_config"])
+    return {}
+
+
+def get_optimal_instruction_count_inline_config(
+    prog: Dict,
+) -> Dict[Tuple[str, str], bool]:
+    with open(csv_path) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["program_name"] == prog["name"]:
+                return ast.literal_eval(row["best_executed_instr_count_config"])
+    return {}
