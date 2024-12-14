@@ -50,3 +50,14 @@ pipeline = [
   "python liveness_dce.py",
   "brili -p {args}",
 ]
+
+[runs.inline_in_loop]
+pipeline = [
+  "bril2json",
+  "python inline.py in_loop",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "brili -p {args}",
+]
