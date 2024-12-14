@@ -61,3 +61,25 @@ pipeline = [
   "python liveness_dce.py",
   "brili -p {args}",
 ]
+
+[runs.inline_single_call_site]
+pipeline = [
+  "bril2json",
+  "python inline.py single_call_site",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "brili -p {args}",
+]
+
+[runs.inline_arg_constantness]
+pipeline = [
+  "bril2json",
+  "python inline.py arg_constantness",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "brili -p {args}",
+]
