@@ -1,9 +1,11 @@
+from copy import deepcopy
 import time
 from typing import Dict, List
 import json
 import glob
 import os
 import subprocess
+from tqdm import tqdm
 
 from benchmark import count_executed_instructions, count_program_size
 from utils.inline.graph import find_recursive_functions, form_call_graph
@@ -132,25 +134,26 @@ pipeline = [
 
 if __name__ == "__main__":
     # Add CSV header
-    csv_file = "utils/inline/optimal_configs.csv"
+    csv_file = "utils/inline/optimal_configs2.csv"
     with open(csv_file, "w") as f:
         f.write(
             "program_name,best_program_size,best_executed_instructions,best_program_size_config,best_executed_instr_count_config\n"
         )
 
     progs = read_bril_programs("../benchmarks")
-    for prog in progs:
+    for raw_prog in progs:
         try:
             time_start = time.time()
-            configs = generate_all_possible_configs(prog)
-            print(f"Program: {prog['name']}")
-            print(f"Number of configs: {len(configs)}")
+            configs = generate_all_possible_configs(raw_prog)
+            print(f"Program: {raw_prog['name']}")
             best_program_size = float("inf")
             best_program_size_config = None
             best_executed_instr_count = float("inf")
             best_executed_instr_count_config = None
-            for i, config in enumerate(configs):
-                print(f"Config {i+1} of {len(configs)}")
+            for i, config in enumerate(
+                tqdm(configs, desc=f"Testing configs for {raw_prog['name']}")
+            ):
+                prog = deepcopy(raw_prog)
                 prog = inline(prog, config)
                 processed_prog = run_pipeline(pipeline, json.dumps(prog), 15)
                 executed_instr_count = count_executed_instructions(processed_prog)
