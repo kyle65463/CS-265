@@ -11,11 +11,17 @@ from utils.inline.optimal import (
     get_optimal_instruction_count_inline_config,
     get_optimal_program_size_inline_config,
 )
+from utils.inline.autotuner import (
+    get_autotuner_instruction_count_inline_config,
+    get_autotuner_program_size_inline_config,
+)
 
 get_inline_config = {
     "all": get_all_inline_config,
     "optimal_ps": get_optimal_program_size_inline_config,
     "optimal_ic": get_optimal_instruction_count_inline_config,
+    "autotuner_ps": get_autotuner_program_size_inline_config,
+    "autotuner_ic": get_autotuner_instruction_count_inline_config,
     "fn_size": get_fn_size_inline_config,
     "in_loop": get_in_loop_inline_config,
     "single_call_site": get_single_call_site_inline_config,

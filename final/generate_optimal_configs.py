@@ -7,7 +7,7 @@ import os
 import subprocess
 from tqdm import tqdm
 
-from benchmark import count_executed_instructions, count_program_size
+from benchmark import count_executed_instructions, count_program_size, run_pipeline
 from utils.inline.graph import find_recursive_functions, form_call_graph
 from inline import inline
 
@@ -92,49 +92,9 @@ def generate_all_possible_configs(prog: Dict) -> List[Dict]:
     return configs
 
 
-def run_pipeline(cmds, input, timeout):
-    """Execute a pipeline of shell commands.
-
-    Send the given input (text) string into the first command, then pipe
-    the output of each command into the next command in the sequence.
-    Collect and return the stdout and stderr from the final command.
-    """
-    procs = []
-    for cmd in cmds:
-        last = len(procs) == len(cmds) - 1
-        proc = subprocess.Popen(
-            cmd,
-            shell=True,
-            text=True,
-            stdin=procs[-1].stdout if procs else subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE if last else subprocess.DEVNULL,
-        )
-        procs.append(proc)
-
-    try:
-        procs[0].stdin.write(input)
-        procs[0].stdin.close()
-        stdout, _ = procs[-1].communicate(timeout=timeout)
-        return json.loads(stdout)
-    except Exception as e:
-        raise e
-    finally:
-        for proc in procs:
-            proc.kill()
-
-
-pipeline = [
-    "python idce.py",
-    "python constant.py",
-    "python lvn.py",
-    "python liveness_dce.py",
-]
-
-
 if __name__ == "__main__":
     # Add CSV header
-    csv_file = "utils/inline/optimal_configs2.csv"
+    csv_file = "utils/inline/optimal_configs.csv"
     with open(csv_file, "w") as f:
         f.write(
             "program_name,best_program_size,best_executed_instructions,best_program_size_config,best_executed_instr_count_config\n"
@@ -155,7 +115,7 @@ if __name__ == "__main__":
             ):
                 prog = deepcopy(raw_prog)
                 prog = inline(prog, config)
-                processed_prog = run_pipeline(pipeline, json.dumps(prog), 15)
+                processed_prog = run_pipeline(json.dumps(prog))
                 executed_instr_count = count_executed_instructions(processed_prog)
                 program_size = count_program_size(prog)
                 if program_size < best_program_size:
@@ -167,12 +127,12 @@ if __name__ == "__main__":
 
             with open(csv_file, "a") as f:
                 f.write(
-                    f'{prog["name"]},{best_program_size},{best_executed_instr_count},"{best_program_size_config}","{best_executed_instr_count_config}"\n'
+                    f'{raw_prog["name"]},{best_program_size},{best_executed_instr_count},"{best_program_size_config}","{best_executed_instr_count_config}"\n'
                 )
             print()
 
         except Exception as e:
             with open(csv_file, "a") as f:
-                f.write(f'{prog["name"]},-1,-1,"",""\n')
+                f.write(f'{raw_prog["name"]},-1,-1,"",""\n')
             print(f"Error: {e}")
             print("Skipping")
