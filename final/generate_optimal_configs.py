@@ -117,7 +117,7 @@ if __name__ == "__main__":
                 prog = inline(prog, config)
                 processed_prog = run_pipeline(json.dumps(prog))
                 executed_instr_count = count_executed_instructions(processed_prog)
-                program_size = count_program_size(prog)
+                program_size = count_program_size(processed_prog)
                 if program_size < best_program_size:
                     best_program_size = program_size
                     best_program_size_config = config

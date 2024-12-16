@@ -1,0 +1,107 @@
+# which benchmarks to run
+benchmarks = './benchmarks/**/*.bril'
+# how to extract the performance metric from stderr
+extract = 'program_size: (\d+)'
+
+[runs.baseline]
+pipeline = [
+  "bril2json",
+  "python benchmark.py",
+]
+
+[runs.task2]
+pipeline = [
+  "bril2json",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_all]
+pipeline = [
+  "bril2json",
+  "python inline.py all",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_optimal_ps]
+pipeline = [
+  "bril2json",
+  "python inline.py optimal_ps",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_autotuner_ps_1]
+pipeline = [
+  "bril2json",
+  "python inline.py autotuner_ps 1",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_fn_size_10]
+pipeline = [
+  "bril2json",
+  "python inline.py fn_size 10",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_fn_size_20]
+pipeline = [
+  "bril2json",
+  "python inline.py fn_size 20",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_in_loop]
+pipeline = [
+  "bril2json",
+  "python inline.py in_loop",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_single_call_site]
+pipeline = [
+  "bril2json",
+  "python inline.py single_call_site",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
+
+[runs.inline_arg_constantness]
+pipeline = [
+  "bril2json",
+  "python inline.py arg_constantness",
+  "python idce.py",
+  "python constant.py",
+  "python lvn.py",
+  "python liveness_dce.py",
+  "python benchmark.py",
+]
