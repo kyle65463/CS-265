@@ -2,7 +2,7 @@ benchmark,run,result
 orders,baseline,61
 orders,task2,61
 orders,inline_all,85
-orders,inline_optimal_ps,61
+orders,inline_optimal_ps,59
 orders,inline_autotuner_ps_1,59
 orders,inline_fn_size_10,68
 orders,inline_fn_size_20,85
@@ -12,7 +12,7 @@ orders,inline_arg_constantness,60
 cholesky,baseline,286
 cholesky,task2,282
 cholesky,inline_all,374
-cholesky,inline_optimal_ps,282
+cholesky,inline_optimal_ps,273
 cholesky,inline_autotuner_ps_1,273
 cholesky,inline_fn_size_10,282
 cholesky,inline_fn_size_20,280
@@ -22,7 +22,7 @@ cholesky,inline_arg_constantness,277
 sieve,baseline,81
 sieve,task2,77
 sieve,inline_all,70
-sieve,inline_optimal_ps,77
+sieve,inline_optimal_ps,69
 sieve,inline_autotuner_ps_1,69
 sieve,inline_fn_size_10,77
 sieve,inline_fn_size_20,70
@@ -32,7 +32,7 @@ sieve,inline_arg_constantness,77
 mat-inv,baseline,124
 mat-inv,task2,124
 mat-inv,inline_all,223
-mat-inv,inline_optimal_ps,124
+mat-inv,inline_optimal_ps,121
 mat-inv,inline_autotuner_ps_1,121
 mat-inv,inline_fn_size_10,173
 mat-inv,inline_fn_size_20,171
@@ -42,7 +42,7 @@ mat-inv,inline_arg_constantness,157
 primitive-root,baseline,145
 primitive-root,task2,141
 primitive-root,inline_all,200
-primitive-root,inline_optimal_ps,141
+primitive-root,inline_optimal_ps,139
 primitive-root,inline_autotuner_ps_1,139
 primitive-root,inline_fn_size_10,152
 primitive-root,inline_fn_size_20,154
@@ -52,7 +52,7 @@ primitive-root,inline_arg_constantness,150
 riemann,baseline,73
 riemann,task2,73
 riemann,inline_all,70
-riemann,inline_optimal_ps,73
+riemann,inline_optimal_ps,70
 riemann,inline_autotuner_ps_1,70
 riemann,inline_fn_size_10,74
 riemann,inline_fn_size_20,72
@@ -62,7 +62,7 @@ riemann,inline_arg_constantness,70
 adler32,baseline,66
 adler32,task2,66
 adler32,inline_all,70
-adler32,inline_optimal_ps,66
+adler32,inline_optimal_ps,64
 adler32,inline_autotuner_ps_1,64
 adler32,inline_fn_size_10,74
 adler32,inline_fn_size_20,73
@@ -72,7 +72,7 @@ adler32,inline_arg_constantness,70
 bitshift,baseline,68
 bitshift,task2,68
 bitshift,inline_all,150
-bitshift,inline_optimal_ps,68
+bitshift,inline_optimal_ps,64
 bitshift,inline_autotuner_ps_1,64
 bitshift,inline_fn_size_10,64
 bitshift,inline_fn_size_20,64
@@ -82,7 +82,7 @@ bitshift,inline_arg_constantness,152
 adj2csr,baseline,115
 adj2csr,task2,115
 adj2csr,inline_all,147
-adj2csr,inline_optimal_ps,115
+adj2csr,inline_optimal_ps,112
 adj2csr,inline_autotuner_ps_1,112
 adj2csr,inline_fn_size_10,115
 adj2csr,inline_fn_size_20,149
@@ -92,7 +92,7 @@ adj2csr,inline_arg_constantness,114
 csrmv,baseline,194
 csrmv,task2,193
 csrmv,inline_all,388
-csrmv,inline_optimal_ps,193
+csrmv,inline_optimal_ps,187
 csrmv,inline_autotuner_ps_1,187
 csrmv,inline_fn_size_10,207
 csrmv,inline_fn_size_20,392
@@ -102,20 +102,10 @@ csrmv,inline_arg_constantness,246
 quicksort-hoare,baseline,135
 quicksort-hoare,task2,135
 quicksort-hoare,inline_all,232
-quicksort-hoare,inline_optimal_ps,135
+quicksort-hoare,inline_optimal_ps,130
 quicksort-hoare,inline_autotuner_ps_1,130
 quicksort-hoare,inline_fn_size_10,163
 quicksort-hoare,inline_fn_size_20,161
 quicksort-hoare,inline_in_loop,154
 quicksort-hoare,inline_single_call_site,132
 quicksort-hoare,inline_arg_constantness,143
-bitwise-ops,baseline,65
-bitwise-ops,task2,63
-bitwise-ops,inline_all,183
-bitwise-ops,inline_optimal_ps,63
-bitwise-ops,inline_autotuner_ps_1,62
-bitwise-ops,inline_fn_size_10,69
-bitwise-ops,inline_fn_size_20,69
-bitwise-ops,inline_in_loop,68
-bitwise-ops,inline_single_call_site,62
-bitwise-ops,inline_arg_constantness,88

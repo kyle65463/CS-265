@@ -109,13 +109,3 @@ quicksort-hoare,inline_fn_size_20,26181
 quicksort-hoare,inline_in_loop,26371
 quicksort-hoare,inline_single_call_site,27238
 quicksort-hoare,inline_arg_constantness,27078
-bitwise-ops,baseline,1690
-bitwise-ops,task2,1688
-bitwise-ops,inline_all,1559
-bitwise-ops,inline_optimal_ic,1559
-bitwise-ops,inline_autotuner_ic_1,1559
-bitwise-ops,inline_fn_size_10,1559
-bitwise-ops,inline_fn_size_20,1559
-bitwise-ops,inline_in_loop,1560
-bitwise-ops,inline_single_call_site,1688
-bitwise-ops,inline_arg_constantness,1688

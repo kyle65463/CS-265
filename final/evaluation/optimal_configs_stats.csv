@@ -1,0 +1,12 @@
+program_name,num_edges,best_program_size_config_inline_count,best_executed_instructions_config_inline_count
+orders.bril,7,2,2
+cholesky.bril,7,6,7
+sieve.bril,5,4,5
+mat-inv.bril,8,2,8
+primitive-root.bril,10,2,6
+riemann.bril,6,3,3
+adler32.bril,5,2,3
+bitshift.bril,5,3,5
+adj2csr.bril,5,3,5
+csrmv.bril,10,3,9
+quicksort-hoare.bril,8,4,6
